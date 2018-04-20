@@ -7,12 +7,15 @@ import (
 
 // Stat is a container for tracking the random variable
 type Stat struct {
-	Sum   float64
-	Sum2  float64
-	Vmin  float64
-	Vmax  float64
-	Count float64
-	Last  float64
+	Sum       float64
+	Sum2      float64
+	Vmin      float64
+	Vmax      float64
+	Count     float64
+	Last      float64 // Value of last added sample
+	Ema       float64 // Exponential moving average
+	ExpWeight float64 // Exponential moving average weight
+
 }
 
 // Reset zeros out the accumilated data
@@ -30,6 +33,7 @@ func (f *Stat) Add(value float64) *Stat {
 		f.Vmin = value
 		f.Vmax = value
 		f.Count = 0.0
+		f.Ema = value
 	}
 	f.Last = value
 	f.Count += 1.0
@@ -41,6 +45,7 @@ func (f *Stat) Add(value float64) *Stat {
 	if value > f.Vmax {
 		f.Vmax = value
 	}
+	f.Ema = value*f.ExpWeight + f.Ema*(1-f.ExpWeight)
 	return f
 }
 
@@ -81,5 +86,5 @@ func (f *Stat) Max() float64 {
 
 // New creates a new random variable ready to add samples
 func New() *Stat {
-	return &Stat{}
+	return &Stat{ExpWeight: 1.0}
 }
