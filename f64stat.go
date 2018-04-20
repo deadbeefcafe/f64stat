@@ -12,6 +12,7 @@ type Stat struct {
 	Vmin  float64
 	Vmax  float64
 	Count float64
+	Last  float64
 }
 
 // Reset zeros out the accumilated data
