@@ -31,6 +31,7 @@ func (f *Stat) Add(value float64) *Stat {
 		f.Vmax = value
 		f.Count = 0.0
 	}
+	f.Last = value
 	f.Count += 1.0
 	f.Sum += value
 	f.Sum2 += value * value
